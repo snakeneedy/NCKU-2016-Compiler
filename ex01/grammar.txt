@@ -1,0 +1,74 @@
+Program
+    VarDeclList FunDeclList
+VarDeclList
+    VarDecl VarDeclList
+    epsilon
+VarDecl
+    Type id ;
+    Type id [ num ] ;
+FunDeclList
+    FunDecl
+    FunDecl FunDeclList
+FunDecl
+    Type id ( ParamDeclList ) Block
+ParamDeclList
+    ParamDeclListTail
+    epsilon
+ParamDeclListTail
+    ParamDecl
+    ParamDecl , ParamDeclListTail
+ParamDecl
+    Type id
+    Type id [ ]
+Block
+    { VarDeclList StmtList }
+Type
+    int
+    char
+StmtList
+    Stmt
+    Stmt StmtList
+Stmt
+    ;
+    Expr ;
+    return Expr ;
+    break ;
+    if ( Expr ) Stmt else Stmt
+    while ( Expr ) Stmt
+    Block
+    print id ;
+    read id ;
+Expr
+    Primary
+    UnaryOp Expr
+    Expr BinOp Expr
+    id = Expr
+    id [ Expr ] = Expr
+Primary
+    id
+    num
+    ( Expr )
+    id ( ExprList )
+    id [ Expr ]
+ExprList
+    ExprListTail
+    epsilon
+ExprListTail
+    Expr
+    Expr , ExprListTail
+UnaryOp
+    -
+    !
+BinOp
+    +
+    -
+    *
+    /
+    ==
+    !=
+    <
+    <=
+    >
+    >=
+    &&
+    ||
