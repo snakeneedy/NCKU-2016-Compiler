@@ -1,74 +1,93 @@
 Program
-    VarDeclList FunDeclList
-VarDeclList
-    VarDecl VarDeclList
-    epsilon
+	DeclList
+DeclList
+	DeclList' DeclList
+	epsilon
+DeclList'
+	Type id Decl
+Decl
+	VarDecl'
+	FunDecl
 VarDecl
-    Type id ;
-    Type id [ num ] ;
-FunDeclList
-    FunDecl
-    FunDecl FunDeclList
+	Type id VarDecl'
+VarDecl'
+	;
+	[ num ] ;
 FunDecl
-    Type id ( ParamDeclList ) Block
+	( ParamDeclList ) Block
+VarDeclList
+	VarDecl VarDeclList
+	epsilon
 ParamDeclList
-    ParamDeclListTail
-    epsilon
+	ParamDeclListTail
+	epsilon
 ParamDeclListTail
-    ParamDecl
-    ParamDecl , ParamDeclListTail
+	ParamDecl ParamDeclListTail'
+ParamDeclListTail'
+	, ParamDeclListTail
+	epsilon
 ParamDecl
-    Type id
-    Type id [ ]
+	Type id ParamDecl'
+ParamDecl'
+	[ ]
+	epsilon
 Block
-    { VarDeclList StmtList }
+	{ VarDeclList StmtList }
 Type
-    int
-    char
+	int
+	char
 StmtList
-    Stmt
-    Stmt StmtList
+	Stmt StmtList'
+StmtList'
+	StmtList
+	epsilon
 Stmt
-    ;
-    Expr ;
-    return Expr ;
-    break ;
-    if ( Expr ) Stmt else Stmt
-    while ( Expr ) Stmt
-    Block
-    print id ;
-    read id ;
+	;
+	Expr ;
+	return Expr ;
+	break ;
+	if ( Expr ) Stmt else Stmt
+	while ( Expr ) Stmt
+	Block
+	print id ; 
+	read id ;
 Expr
-    Primary
-    UnaryOp Expr
-    Expr BinOp Expr
-    id = Expr
-    id [ Expr ] = Expr
-Primary
-    id
-    num
-    ( Expr )
-    id ( ExprList )
-    id [ Expr ]
+	UnaryOp Expr
+	num Expr'
+	( Expr ) Expr'
+	id ExprIdTail
+ExprIdTail
+	Expr'
+	( ExprList ) Expr'
+	[ Expr ] ExprArrayTail
+	= Expr
+ExprArrayTail
+	Expr'
+	= Expr
+Expr'
+	BinOp Expr
+	epsilon
 ExprList
-    ExprListTail
-    epsilon
+	ExprListTail
+	epsilon
 ExprListTail
-    Expr
-    Expr , ExprListTail
+	Expr ExprListTail'
+ExprListTail'
+	, ExprListTail
+	epsilon
 UnaryOp
-    -
-    !
+	-
+	!
 BinOp
-    +
-    -
-    *
-    /
-    ==
-    !=
-    <
-    <=
-    >
-    >=
-    &&
-    ||
+	+
+	-
+	*
+	/
+	==
+	!=
+	<
+	<=
+	>
+	>=
+	&&
+	||
