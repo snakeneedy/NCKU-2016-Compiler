@@ -4,7 +4,7 @@ CC		= g++
 CFLAGS	= -g -Wall -pedantic
 
 calc: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o calc -ll
+	$(CC) $(CFLAGS) $(OBJS) -o calc -lfl
 
 lex.o: lex.c
 	$(CC) $(CFLAGS) -c lex.c -o lex.o
