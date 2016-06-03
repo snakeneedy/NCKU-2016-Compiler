@@ -1,10 +1,20 @@
-REMAINS = lex.yy.c lex.yy.o  y.tab.c y.tab.h y.tab.o
+OBJS = y.tab.o  lex.yy.o
+REMAINS = y.tab.c y.tab.h  lex.yy.c
 TARGET = parser
-build:
+CX = g++
+CXFLAG = -Wall
+build: ${OBJS}
+	${CX} -o ${TARGET}  y.tab.o lex.yy.o  ${CXFLAG}
+
+%.o: %.c
+	${CX} -c $<
+
+y.tab.c: parser.y
 	bison -y -d parser.y
+
+lex.yy.c: parser.l
 	flex parser.l
-	gcc -c y.tab.c lex.yy.c
-	gcc -o ${TARGET}  y.tab.o lex.yy.o
+
 clean:
-	rm  ${REMAINS}  ${TARGET}
+	rm  ${REMAINS}  ${OBJS}  ${TARGET}
 
