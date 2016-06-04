@@ -16,30 +16,16 @@
 
 %%
 Program: {cout << "[Yacc] Program: /* empty */" << "\n";}
-	| DeclList {cout << "[Yacc] Program: DeclList" << "\n";}
-	| Type Id ';' {cout << "[Yacc] Program: Type Id ';'" << "\n";}
+	| StmtList {cout << "[Yacc] Program: StmtList" << "\n";}
 ;
 
-DeclList: {cout << "[Yacc] DeclList: /* empty */" << "\n";}
-	| DeclList_ DeclList {cout << "[Yacc] DeclList: DeclList_ DeclList" << "\n";}
-;
-
-DeclList_: Type Id Decl {cout << "[Yacc] DeclList_: Type Id Decl" << "\n";}
-	| Stmt
-;
-
-Type: Int {cout << "[Yacc] Type: Int" << "\n";}
-	| Char {cout << "[Yacc] Type: Char" << "\n";}
-;
-
-Decl: VarDecl {cout << "[Yacc] Decl: VarDecl" << "\n";}
-;
-
-VarDecl: ';' {cout << "[Yacc] VarDecl: ';'" << "\n";}
+StmtList: Stmt StmtList {cout << "[Yacc] StmtList: Stmt StmtList" << "\n";}
+	| Stmt {cout << "[Yacc] StmtList: Stmt" << "\n";}
 ;
 
 Stmt: ';' {cout << "[Yacc] Stmt: ';'" << "\n";}
-	| Read Id ';' {cout << "[Yacc] Stmt: read Id ';'" << "\n";}
+	| Int Id ';' {cout << "[Yacc] Stmt: Int Id ';'" << "\n";}
+	| Read Id ';' {cout << "[Yacc] Stmt: Read Id ';'" << "\n";}
 ;
 
 %%
@@ -74,4 +60,3 @@ int main(int argc, char **argv)
 	}
     yyparse();
 }
-

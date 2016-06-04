@@ -15,10 +15,9 @@ word	{letter}+
 
 %%
 int			{cout << "[Lex] int" << "\n"; return Int;}
-char		{cout << "[Lex] char" << "\n"; return Char;}
 read		{cout << "[Lex] read" << "\n"; return Read;}
 print		{cout << "[Lex] print" << "\n"; return Print;}
-;			{cout << "[Lex] ;" << "\n"; return *yytext;}
+[\(\)\{\};]		{cout << "[Lex] " << *yytext << "\n"; return *yytext;}
 id{upper}{alfa}*	{cout << "[Lex] id: " << yytext << "\n"; return Id;}
 whitesp		;
 
