@@ -1,16 +1,30 @@
 %{
-	#include "y.tab.h"
-    #include "parser.h"
-    void yyerror(char *);
+#include "parser.h"
+#include "y.tab.h"
 %}
 
-%%
+digit	[0-9]
+letter	[A-Za-z]
+upper	[A-Z]
+lower	[a-z]
+alfa	[0-9A-Za-z_]
+whitesp	[ \t\n]
 
-[\n]	{yylineno++; return *yytext;}
-[^\n]+	{return TOKEN;}
+num		{digit}+
+word	{letter}+
+
+%%
+int			{cout << "[Lex] int" << "\n"; return Int;}
+char		{cout << "[Lex] char" << "\n"; return Char;}
+read		{cout << "[Lex] read" << "\n"; return Read;}
+print		{cout << "[Lex] print" << "\n"; return Print;}
+;			{cout << "[Lex] ;" << "\n"; return *yytext;}
+id{upper}{alfa}*	{cout << "[Lex] id: " << yytext << "\n"; return Id;}
+whitesp		;
 
 %%
 
 int yywrap(void) {
-    return 1;
+	return 1;
 }
+
