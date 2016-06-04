@@ -11,22 +11,16 @@
 }
 
 %start Program
-%token Id Int Char Read Print
+%token Id Int Char Read Print Main
 
 
 %%
-Program: {cout << "[Yacc] Program: /* empty */" << "\n";}
-	| StmtList {cout << "[Yacc] Program: StmtList" << "\n";}
+Program: {cout << "[Yacc] Program: empty" << "\n";}
+	| Int Main '(' ')' '{' Stmt '}' {cout << "[Yacc] Program: Int Main '(' ')' '{' '}'" << "\n";}
 ;
 
-StmtList: Stmt StmtList {cout << "[Yacc] StmtList: Stmt StmtList" << "\n";}
-	| Stmt {cout << "[Yacc] StmtList: Stmt" << "\n";}
-;
-
-Stmt: ';' {cout << "[Yacc] Stmt: ';'" << "\n";}
-	| Int Id ';' {cout << "[Yacc] Stmt: Int Id ';'" << "\n";}
-	| Read Id ';' {cout << "[Yacc] Stmt: Read Id ';'" << "\n";}
-	| Print Id ';' {cout << "[Yacc] Stmt: Print Id ';'" << "\n";}
+Stmt: {cout << "[Yacc] Stmt: empty" << "\n";}
+	| ';' {cout << "[Yacc] Stmt: ';'" << "\n";}
 ;
 
 %%
