@@ -2,8 +2,8 @@ OBJS = y.tab.o lex.yy.o
 REMAINS = y.tab.c y.tab.h lex.yy.c
 TARGET = parser
 CX = g++
-#CXFLAG = -Wall -lfl
-CXFLAG = -g -Wall -pedantic
+CXFLAG = -Wall -lfl
+#CXFLAG = -g -Wall -pedantic
 
 
 build: ${OBJS}

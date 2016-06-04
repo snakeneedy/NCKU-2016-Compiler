@@ -26,6 +26,7 @@ StmtList: Stmt StmtList {cout << "[Yacc] StmtList: Stmt StmtList" << "\n";}
 Stmt: ';' {cout << "[Yacc] Stmt: ';'" << "\n";}
 	| Int Id ';' {cout << "[Yacc] Stmt: Int Id ';'" << "\n";}
 	| Read Id ';' {cout << "[Yacc] Stmt: Read Id ';'" << "\n";}
+	| Print Id ';' {cout << "[Yacc] Stmt: Print Id ';'" << "\n";}
 ;
 
 %%
