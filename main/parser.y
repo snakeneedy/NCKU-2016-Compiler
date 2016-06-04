@@ -49,12 +49,13 @@ int yyerror(string s)
 
 int main(int argc, char **argv)
 {
+	extern FILE *yyin;
 	if (argc == 1)
 	{
 		cerr << argv[0] << ": No input file.\n";
 		return 1;
 	}
-	else if (argc > 1 && freopen(argv[1], "r", stdin) == NULL)
+	else if (argc > 1 && (yyin = fopen(argv[1], "r")) == NULL)
 	{
 		cerr << argv[0] << ": " << argv[1] << " cannot be open.\n";
 		return 1;
