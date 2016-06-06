@@ -1,6 +1,6 @@
-int idFunction ( int idVal1 , int idVal2 ) {
+int idFunction ( int idValA , int idValB ) {
     int idSum ;
-    idSum = idVal1 + idVal2 ;
+    idSum = idValA + idValB ;
     print idSum ;
     return idSum ;
 }
