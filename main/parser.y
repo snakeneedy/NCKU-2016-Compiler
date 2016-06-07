@@ -10,9 +10,11 @@
 	string* str_val;
 }
 %start Program
-%token Id Int Char Read Print Main
+%token Int Char Read Print Main Return
 %token '<' '>' '(' ')' '{' '}' '[' ']' '+' '-' '*' '=' ',' ';'
 %token Geq Leq Eq Neq
+%token <int_val> Number Id
+%type <int_val> Value
 
 %%
 
@@ -26,9 +28,16 @@ StmtList: {cout << "[Yacc] StmtList: empty" << "\n";}
 
 Stmt: ';' {cout << "[Yacc] Stmt: ';'" << "\n";}
 	| Decl {cout << "[Yacc] Stmt: Decl" << "\n";}
+	| Read Id ';' {cout << "[Yacc] Stmt: Read Id ';'" << "\n";}
+	| Print Value ';' {cout << "[Yacc] Stmt: Print Value(" << $2 << ") ';'" << "\n";}
+	| Return Value ';' {cout << "[Yacc] Stmt: Return Value(" << $2 << ") ';'" << "\n";}
 ;
 
 Decl: Int Id ';' {cout << "[Yacc] Decl: Int Id ';'" << "\n";}
+;
+
+Value: Number {cout << "[Yacc] Value: Number(" << $1 << ")" << "\n";}
+	| Id {cout << "[Yacc] Value: Id(" << $1 << ")" << "\n";}
 ;
 
 %%

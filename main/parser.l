@@ -21,15 +21,17 @@ int			{cout << "[Lex] int" << "\n"; return Int;}
 read		{cout << "[Lex] read" << "\n"; return Read;}
 print		{cout << "[Lex] print" << "\n"; return Print;}
 idMain		{cout << "[Lex] idMain" << "\n"; return Main;}
-">="		{return Geq;}
-"<="		{return Leq;}
-"=="		{return Eq;}
-"!="		{return Neq;}
+return		{cout << "[Lex] return" << "\n"; return Return;}
+">="		{cout << "[Lex] '>='" << "\n"; return Geq;}
+"<="		{cout << "[Lex] '<='" << "\n"; return Leq;}
+"=="		{cout << "[Lex] '=='" << "\n"; return Eq;}
+"!="		{cout << "[Lex] '!='" << "\n"; return Neq;}
 [ \t]		{;}
 \n			{yylineno++;}
+{num}		{cout << "[Lex] Number(" << yytext << ")" << "\n"; yylval.int_val = atoi(yytext); return Number;}
 
 [<>(){}\[\]+\-*/=,;]	{cout << "[Lex] " << *yytext << "\n"; return *yytext;}
-id{upper}{letter}*		{cout << "[Lex] id: " << yytext << "\n"; return Id;}
+id{upper}{letter}*		{cout << "[Lex] id: " << yytext << "\n"; yylval.int_val = 0; return Id;}
 
 [^ \t\n]	{yyerror(yytext);}
 
