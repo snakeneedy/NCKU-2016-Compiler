@@ -9,18 +9,26 @@
 	int     int_val;
 	string* str_val;
 }
-
 %start Program
 %token Id Int Char Read Print Main
-
+%token '<' '>' '(' ')' '{' '}' '[' ']' '+' '-' '*' '=' ',' ';'
+%token Geq Leq Eq Neq
 
 %%
+
 Program: {cout << "[Yacc] Program: empty" << "\n";}
-	| Int Main '(' ')' '{' Stmt '}' {cout << "[Yacc] Program: Int Main '(' ')' '{' '}'" << "\n";}
+	| Int Main '(' ')' '{' StmtList '}' {cout << "[Yacc] Program: Int Main '(' ')' '{' StmtList '}'" << "\n";}
 ;
 
-Stmt: {cout << "[Yacc] Stmt: empty" << "\n";}
-	| ';' {cout << "[Yacc] Stmt: ';'" << "\n";}
+StmtList: {cout << "[Yacc] StmtList: empty" << "\n";}
+	| StmtList Stmt
+;
+
+Stmt: ';' {cout << "[Yacc] Stmt: ';'" << "\n";}
+	| Decl {cout << "[Yacc] Stmt: Decl" << "\n";}
+;
+
+Decl: Int Id ';' {cout << "[Yacc] Decl: Int Id ';'" << "\n";}
 ;
 
 %%
