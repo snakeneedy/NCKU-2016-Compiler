@@ -2,6 +2,12 @@
 
 # Current situation
 
+Run command:
+
++ `./main/parser <input_path>`
++ `./main/parser <input_path> -o <output_path>`
++ `./main/parser -o <output_path> <input_path>`
+
 ```bash
 $ cd main
 $ make

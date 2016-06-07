@@ -18,105 +18,106 @@
 
 %%
 
-Program: DeclList {debug("Program: DeclList");}
+Program: DeclList {debug("[Yacc] Program: DeclList");}
 ;
-DeclList: {debug("DeclList:");}
-	| DeclList_ DeclList {debug("DeclList: DeclList_ DeclList");}
+DeclList: {debug("[Yacc] DeclList:");}
+	| DeclList_ DeclList {debug("[Yacc] DeclList: DeclList_ DeclList");}
 ;
-DeclList_: Type Id Decl {debug("DeclList_: Type Id Decl");}
+DeclList_: Type Id Decl {debug("[Yacc] DeclList_: Type Id Decl");}
 ;
-Decl: VarDecl_ {debug("Decl: VarDecl_");}
-	| FunDecl {debug("Decl: FunDecl");}
+Decl: VarDecl_ {debug("[Yacc] Decl: VarDecl_");}
+	| FunDecl {debug("[Yacc] Decl: FunDecl");}
 ;
-VarDecl: Type Id VarDecl_ {debug("VarDecl: Type Id VarDecl_");}
+VarDecl: Type Id VarDecl_ {debug("[Yacc] VarDecl: Type Id VarDecl_");}
 ;
-VarDecl_: ';' {debug("VarDecl_: ';'");}
-	| '[' Number ']' ';' {debug("VarDecl_: '[' Number ']' ';'");}
+VarDecl_: ';' {debug("[Yacc] VarDecl_: ';'");}
+	| '[' Number ']' ';' {debug("[Yacc] VarDecl_: '[' Number ']' ';'");}
 ;
-FunDecl: '(' ParamDeclList ')' Block {debug("FunDecl: '(' ParamDeclList ')' Block");}
+FunDecl: '(' ParamDeclList ')' Block {debug("[Yacc] FunDecl: '(' ParamDeclList ')' Block");}
 ;
-VarDeclList: {debug("VarDeclList:");}
-	| VarDecl VarDeclList {debug("VarDeclList: VarDecl VarDeclList");}
+VarDeclList: {debug("[Yacc] VarDeclList:");}
+	| VarDecl VarDeclList {debug("[Yacc] VarDeclList: VarDecl VarDeclList");}
 ;
-ParamDeclList: {debug("ParamDeclList:");}
-	| ParamDeclListTail {debug("ParamDeclList: ParamDeclListTail");}
+ParamDeclList: {debug("[Yacc] ParamDeclList:");}
+	| ParamDeclListTail {debug("[Yacc] ParamDeclList: ParamDeclListTail");}
 ;
-ParamDeclListTail: ParamDecl ParamDeclListTail_ {debug("ParamDeclListTail: ParamDecl ParamDeclListTail_");}
+ParamDeclListTail: ParamDecl ParamDeclListTail_ {debug("[Yacc] ParamDeclListTail: ParamDecl ParamDeclListTail_");}
 ;
-ParamDeclListTail_: {debug("ParamDeclListTail_:");}
-	| ',' ParamDeclListTail {debug("ParamDeclListTail_: ',' ParamDeclListTail");}
+ParamDeclListTail_: {debug("[Yacc] ParamDeclListTail_:");}
+	| ',' ParamDeclListTail {debug("[Yacc] ParamDeclListTail_: ',' ParamDeclListTail");}
 ;
-ParamDecl: Type Id ParamDecl_ {debug("ParamDecl: Type Id ParamDecl_");}
+ParamDecl: Type Id ParamDecl_ {debug("[Yacc] ParamDecl: Type Id ParamDecl_");}
 ;
-ParamDecl_: {debug("ParamDecl_:");}
-	| '[' ']' {debug("ParamDecl_: '[' ']'");}
+ParamDecl_: {debug("[Yacc] ParamDecl_:");}
+	| '[' ']' {debug("[Yacc] ParamDecl_: '[' ']'");}
 ;
-Block: '{' VarDeclList StmtList '}' {debug("Block: '{' VarDeclList StmtList '}'");}
+Block: '{' VarDeclList StmtList '}' {debug("[Yacc] Block: '{' VarDeclList StmtList '}'");}
 ;
-Type: Int {debug("Type: Int");}
-	| Char {debug("Type: Char");}
+Type: Int {debug("[Yacc] Type: Int");}
+	| Char {debug("[Yacc] Type: Char");}
 ;
-StmtList: Stmt StmtList_ {debug("StmtList: Stmt StmtList_");}
+StmtList: Stmt StmtList_ {debug("[Yacc] StmtList: Stmt StmtList_");}
 ;
-StmtList_: {debug("StmtList_:");}
-	| StmtList {debug("StmtList_: StmtList");}
+StmtList_: {debug("[Yacc] StmtList_:");}
+	| StmtList {debug("[Yacc] StmtList_: StmtList");}
 ;
-Stmt: ';' {debug("Stmt: ';'");}
-	| Expr ';' {debug("Stmt: Expr ';'");}
-	| Return Expr ';' {debug("Stmt: Return Expr ';'");}
-	| Break ';' {debug("Stmt: Break ';'");}
-	| If '(' Expr ')' Stmt Else Stmt {debug("Stmt: If '(' Expr ')' Stmt Else Stmt");}
-	| While '(' Expr ')' Stmt {debug("Stmt: While '(' Expr ')' Stmt");}
-	| Block {debug("Stmt: Block");}
-	| Print Id ';' {debug("Stmt: Print Id ';'");}
-	| Read Id ';' {debug("Stmt: Read Id ';'");}
+Stmt: ';' {debug("[Yacc] Stmt: ';'");}
+	| Expr ';' {debug("[Yacc] Stmt: Expr ';'");}
+	| Return Expr ';' {debug("[Yacc] Stmt: Return Expr ';'");}
+	| Break ';' {debug("[Yacc] Stmt: Break ';'");}
+	| If '(' Expr ')' Stmt Else Stmt {debug("[Yacc] Stmt: If '(' Expr ')' Stmt Else Stmt");}
+	| While '(' Expr ')' Stmt {debug("[Yacc] Stmt: While '(' Expr ')' Stmt");}
+	| Block {debug("[Yacc] Stmt: Block");}
+	| Print Id ';' {debug("[Yacc] Stmt: Print Id ';'");}
+	| Read Id ';' {debug("[Yacc] Stmt: Read Id ';'");}
 ;
-Expr: UnaryOp Expr {debug("Expr: UnaryOp Expr");}
-	| Number Expr_ {debug("Expr: Number Expr_");}
-	| '(' Expr ')' Expr_ {debug("Expr: '(' Expr ')' Expr_");}
-	| Id ExprIdTail {debug("Expr: Id ExprIdTail");}
+Expr: UnaryOp Expr {debug("[Yacc] Expr: UnaryOp Expr");}
+	| Number Expr_ {debug("[Yacc] Expr: Number Expr_");}
+	| '(' Expr ')' Expr_ {debug("[Yacc] Expr: '(' Expr ')' Expr_");}
+	| Id ExprIdTail {debug("[Yacc] Expr: Id ExprIdTail");}
 ;
-ExprIdTail: Expr_ {debug("ExprIdTail: Expr_");}
-	| '(' ExprList ')' Expr_ {debug("ExprIdTail: '(' ExprList ')' Expr_");}
-	| '[' Expr ']' ExprArrayTail {debug("ExprIdTail: '[' Expr ']' ExprArrayTail");}
-	| '=' Expr {debug("ExprIdTail: '=' Expr");}
+ExprIdTail: Expr_ {debug("[Yacc] ExprIdTail: Expr_");}
+	| '(' ExprList ')' Expr_ {debug("[Yacc] ExprIdTail: '(' ExprList ')' Expr_");}
+	| '[' Expr ']' ExprArrayTail {debug("[Yacc] ExprIdTail: '[' Expr ']' ExprArrayTail");}
+	| '=' Expr {debug("[Yacc] ExprIdTail: '=' Expr");}
 ;
-ExprArrayTail: Expr_ {debug("ExprArrayTail: Expr_");}
-	| '=' Expr {debug("ExprArrayTail: '=' Expr");}
+ExprArrayTail: Expr_ {debug("[Yacc] ExprArrayTail: Expr_");}
+	| '=' Expr {debug("[Yacc] ExprArrayTail: '=' Expr");}
 ;
-Expr_: {debug("Expr_:");}
-	| BinOp Expr {debug("Expr_: BinOp Expr");}
+Expr_: {debug("[Yacc] Expr_:");}
+	| BinOp Expr {debug("[Yacc] Expr_: BinOp Expr");}
 ;
-ExprList: {debug("ExprList:");}
-	| ExprListTail {debug("ExprList: ExprListTail");}
+ExprList: {debug("[Yacc] ExprList:");}
+	| ExprListTail {debug("[Yacc] ExprList: ExprListTail");}
 ;
-ExprListTail: Expr ExprListTail_ {debug("ExprListTail: Expr ExprListTail_");}
+ExprListTail: Expr ExprListTail_ {debug("[Yacc] ExprListTail: Expr ExprListTail_");}
 ;
-ExprListTail_: {debug("ExprListTail_:");}
-	| ',' ExprListTail {debug("ExprListTail_: ',' ExprListTail");}
+ExprListTail_: {debug("[Yacc] ExprListTail_:");}
+	| ',' ExprListTail {debug("[Yacc] ExprListTail_: ',' ExprListTail");}
 ;
-UnaryOp: '-' {debug("UnaryOp: '-'");}
-	| '!' {debug("UnaryOp: '!'");}
+UnaryOp: '-' {debug("[Yacc] UnaryOp: '-'");}
+	| '!' {debug("[Yacc] UnaryOp: '!'");}
 ;
-BinOp: '+' {debug("BinOp: '+'");}
-	| '-' {debug("BinOp: '-'");}
-	| '*' {debug("BinOp: '*'");}
-	| '/' {debug("BinOp: '/'");}
-	| Eq {debug("BinOp: Eq");}
-	| Neq {debug("BinOp: Neq");}
-	| '<' {debug("BinOp: '<'");}
-	| Leq {debug("BinOp: Leq");}
-	| '>' {debug("BinOp: '>'");}
-	| Geq {debug("BinOp: Geq");}
-	| And {debug("BinOp: And");}
-	| Or {debug("BinOp: Or");}
+BinOp: '+' {debug("[Yacc] BinOp: '+'");}
+	| '-' {debug("[Yacc] BinOp: '-'");}
+	| '*' {debug("[Yacc] BinOp: '*'");}
+	| '/' {debug("[Yacc] BinOp: '/'");}
+	| Eq {debug("[Yacc] BinOp: Eq");}
+	| Neq {debug("[Yacc] BinOp: Neq");}
+	| '<' {debug("[Yacc] BinOp: '<'");}
+	| Leq {debug("[Yacc] BinOp: Leq");}
+	| '>' {debug("[Yacc] BinOp: '>'");}
+	| Geq {debug("[Yacc] BinOp: Geq");}
+	| And {debug("[Yacc] BinOp: And");}
+	| Or {debug("[Yacc] BinOp: Or");}
 ;
 
 %%
 
 void debug(string s)
 {
-	cout << "[Yacc] " << s << "\n";
+	extern FILE *yyout;
+	fprintf(yyout, "%s\n", s.c_str());
 }
 int yyerror()
 {
@@ -136,16 +137,36 @@ int yyerror(string s)
 
 int main(int argc, char **argv)
 {
-	extern FILE *yyin;
+	extern FILE *yyin, *yyout;
 	if (argc == 1)
 	{
 		cerr << argv[0] << ": No input file.\n";
 		return 1;
 	}
-	else if (argc > 1 && (yyin = fopen(argv[1], "r")) == NULL)
+	else if (argc > 1)
 	{
-		cerr << argv[0] << ": " << argv[1] << " cannot be open.\n";
-		return 1;
+		for (int i = 1; i < argc; ++i)
+		{
+			if (string(argv[i]) == "-o")
+			{
+				if (i + 1 == argc)
+				{
+					cerr << argv[0] << ": No output file.\n";
+					return 1;
+				}
+				else if ((yyout = fopen(argv[i + 1], "w")) == NULL)
+				{
+					cerr << argv[0] << ": " << argv[i + 1] << " cannot be written.\n";
+					return 1;
+				}
+				i++;
+			}
+			else if ((yyin = fopen(argv[i], "r")) == NULL)
+			{
+				cerr << argv[0] << ": " << argv[1] << " cannot be open.\n";
+				return 1;
+			}
+		}
 	}
 	yyparse();
 }

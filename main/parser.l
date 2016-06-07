@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "y.tab.h"
 int yyerror(char *);
+void debug(string);
 %}
 
 digit	[0-9]
@@ -17,27 +18,27 @@ word	{letter}+
 
 %%
 
-int			{cout << "[Lex] int" << "\n"; return Int;}
-read		{cout << "[Lex] read" << "\n"; return Read;}
-print		{cout << "[Lex] print" << "\n"; return Print;}
-return		{cout << "[Lex] return" << "\n"; return Return;}
-if			{cout << "[Lex] if" << "\n"; return If;}
-else		{cout << "[Lex] else" << "\n"; return Else;}
-while		{cout << "[Lex] while" << "\n"; return While;}
-break		{cout << "[Lex] break" << "\n"; return Break;}
+int			{debug("[Lex] int"); return Int;}
+read		{debug("[Lex] read"); return Read;}
+print		{debug("[Lex] print"); return Print;}
+return		{debug("[Lex] return"); return Return;}
+if			{debug("[Lex] if"); return If;}
+else		{debug("[Lex] else"); return Else;}
+while		{debug("[Lex] while"); return While;}
+break		{debug("[Lex] break"); return Break;}
 
-">="		{cout << "[Lex] '>='" << "\n"; return Geq;}
-"<="		{cout << "[Lex] '<='" << "\n"; return Leq;}
-"=="		{cout << "[Lex] '=='" << "\n"; return Eq;}
-"!="		{cout << "[Lex] '!='" << "\n"; return Neq;}
-"&&"		{cout << "[Lex] '&&'" << "\n"; return And;}
-"||"		{cout << "[Lex] '||'" << "\n"; return Or;}
+">="		{debug("[Lex] '>='"); return Geq;}
+"<="		{debug("[Lex] '<='"); return Leq;}
+"=="		{debug("[Lex] '=='"); return Eq;}
+"!="		{debug("[Lex] '!='"); return Neq;}
+"&&"		{debug("[Lex] '&&'"); return And;}
+"||"		{debug("[Lex] '||'"); return Or;}
 [ \t]		{;}
 \n			{yylineno++;}
-{num}		{cout << "[Lex] Number(" << yytext << ")" << "\n"; yylval.int_val = atoi(yytext); return Number;}
+{num}		{debug("[Lex] Number"); yylval.int_val = atoi(yytext); return Number;}
 
-[<>(){}\[\]+\-*/=,;]	{cout << "[Lex] " << *yytext << "\n"; return *yytext;}
-id{upper}{letter}*		{cout << "[Lex] id: " << yytext << "\n"; yylval.int_val = 0; return Id;}
+[<>(){}\[\]+\-*/=,;]	{debug("[Lex] " + string(yytext)); return *yytext;}
+id{upper}{letter}*		{debug("[Lex] id: " + string(yytext)); yylval.int_val = 0; return Id;}
 
 [^ \t\n]	{yyerror(yytext);}
 
