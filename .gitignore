@@ -1,0 +1,9 @@
+*.bak
+*.o
+*.swp
+*.sh
+main/lex.yy.c
+main/parser.exe
+main/parser
+main/y.tab.c
+main/y.tab.h
