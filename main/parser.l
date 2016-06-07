@@ -20,12 +20,18 @@ word	{letter}+
 int			{cout << "[Lex] int" << "\n"; return Int;}
 read		{cout << "[Lex] read" << "\n"; return Read;}
 print		{cout << "[Lex] print" << "\n"; return Print;}
-idMain		{cout << "[Lex] idMain" << "\n"; return Main;}
 return		{cout << "[Lex] return" << "\n"; return Return;}
+if			{cout << "[Lex] if" << "\n"; return If;}
+else		{cout << "[Lex] else" << "\n"; return Else;}
+while		{cout << "[Lex] while" << "\n"; return While;}
+break		{cout << "[Lex] break" << "\n"; return Break;}
+
 ">="		{cout << "[Lex] '>='" << "\n"; return Geq;}
 "<="		{cout << "[Lex] '<='" << "\n"; return Leq;}
 "=="		{cout << "[Lex] '=='" << "\n"; return Eq;}
 "!="		{cout << "[Lex] '!='" << "\n"; return Neq;}
+"&&"		{cout << "[Lex] '&&'" << "\n"; return And;}
+"||"		{cout << "[Lex] '||'" << "\n"; return Or;}
 [ \t]		{;}
 \n			{yylineno++;}
 {num}		{cout << "[Lex] Number(" << yytext << ")" << "\n"; yylval.int_val = atoi(yytext); return Number;}
