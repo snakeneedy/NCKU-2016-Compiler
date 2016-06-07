@@ -1,8 +1,8 @@
 %{
-    #include "parser.h"
-    int yylex(void);
-    int yyerror();
-    int yyerror(char *);
+	#include "parser.h"
+	int yylex(void);
+	int yyerror();
+	int yyerror(char *);
 	int yyerror(string s);
 	void debug(string);
 %}
@@ -147,5 +147,5 @@ int main(int argc, char **argv)
 		cerr << argv[0] << ": " << argv[1] << " cannot be open.\n";
 		return 1;
 	}
-    yyparse();
+	yyparse();
 }
