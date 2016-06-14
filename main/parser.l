@@ -33,7 +33,7 @@ break		{debug("[Lex] break"); return Break;}
 "!="		{debug("[Lex] '!='"); return Neq;}
 "&&"		{debug("[Lex] '&&'"); return And;}
 "||"		{debug("[Lex] '||'"); return Or;}
-[ \t]		{;}
+[ \t\r]		{;}
 \n			{yylineno++;}
 {num}		{debug("[Lex] Number"); yylval.int_val = atoi(yytext); return Number;}
 
