@@ -83,8 +83,6 @@ int idMain ( ) {
     int idA ;
     int idB ;
     int idResult ;
-    int idLoop;
-    int idArray [ 10 ] ;
 
     read idA ;
     read idB ;
@@ -114,15 +112,7 @@ int idMain ( ) {
 [Yacc] Type: Int
 [Yacc] VarDecl_: ';'
 [Yacc] VarDecl: Type Id VarDecl_
-[Yacc] Type: Int
-[Yacc] VarDecl_: ';'
-[Yacc] VarDecl: Type Id VarDecl_
-[Yacc] Type: Int
-[Yacc] VarDecl_: '[' Number ']' ';'
-[Yacc] VarDecl: Type Id VarDecl_
 [Yacc] VarDeclList:
-[Yacc] VarDeclList: VarDecl VarDeclList
-[Yacc] VarDeclList: VarDecl VarDeclList
 [Yacc] VarDeclList: VarDecl VarDeclList
 [Yacc] VarDeclList: VarDecl VarDeclList
 [Yacc] VarDeclList: VarDecl VarDeclList
