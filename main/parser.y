@@ -24,12 +24,16 @@ Program: DeclList {debug("[Yacc]", "Program: DeclList");}
 DeclList: {debug("[Yacc]", "DeclList:");}
 	| DeclList_ DeclList {debug("[Yacc]", "DeclList: DeclList_ DeclList");}
 ;
-DeclList_: Type Id Decl {debug("[Yacc]", "DeclList_: Type Id Decl");}
+DeclList_: Type Id Decl
+	{
+		debug("[Yacc]", "DeclList_: Type Id("+*$<str_val>2+") Decl");
+		// TODO: idMain
+	}
 ;
 Decl: VarDecl_ {debug("[Yacc]", "Decl: VarDecl_");}
 	| FunDecl {debug("[Yacc]", "Decl: FunDecl");}
 ;
-VarDecl: Type Id VarDecl_ {debug("[Yacc]", "VarDecl: Type Id VarDecl_");}
+VarDecl: Type Id VarDecl_ {debug("[Yacc]", "VarDecl: Type Id("+*$<str_val>2+") VarDecl_");}
 ;
 VarDecl_: ';' {debug("[Yacc]", "VarDecl_: ';'");}
 	| '[' Number ']' ';' {debug("[Yacc]", "VarDecl_: '[' Number ']' ';'");}
@@ -47,7 +51,7 @@ ParamDeclListTail: ParamDecl ParamDeclListTail_ {debug("[Yacc]", "ParamDeclListT
 ParamDeclListTail_: {debug("[Yacc]", "ParamDeclListTail_:");}
 	| ',' ParamDeclListTail {debug("[Yacc]", "ParamDeclListTail_: ',' ParamDeclListTail");}
 ;
-ParamDecl: Type Id ParamDecl_ {debug("[Yacc]", "ParamDecl: Type Id ParamDecl_");}
+ParamDecl: Type Id ParamDecl_ {debug("[Yacc]", "ParamDecl: Type Id("+*$<str_val>2+") ParamDecl_");}
 ;
 ParamDecl_: {debug("[Yacc]", "ParamDecl_:");}
 	| '[' ']' {debug("[Yacc]", "ParamDecl_: '[' ']'");}
@@ -69,13 +73,21 @@ Stmt: ';' {debug("[Yacc]", "Stmt: ';'");}
 	| If '(' Expr ')' Stmt Else Stmt {debug("[Yacc]", "Stmt: If '(' Expr ')' Stmt Else Stmt");}
 	| While '(' Expr ')' Stmt {debug("[Yacc]", "Stmt: While '(' Expr ')' Stmt");}
 	| Block {debug("[Yacc]", "Stmt: Block");}
-	| Print Id ';' {debug("[Yacc]", "Stmt: Print Id ';'");}
-	| Read Id ';' {debug("[Yacc]", "Stmt: Read Id ';'");}
+	| Print Id ';'
+	{
+		debug("[Yacc]", "Stmt: Print Id("+*$<str_val>2+") ';'");
+		// TODO: Print
+	}
+	| Read Id ';'
+	{
+		debug("[Yacc]", "Stmt: Read Id("+*$<str_val>2+") ';'");
+		// TODO: Read
+	}
 ;
 Expr: UnaryOp Expr {debug("[Yacc]", "Expr: UnaryOp Expr");}
 	| Number Expr_ {debug("[Yacc]", "Expr: Number Expr_");}
 	| '(' Expr ')' Expr_ {debug("[Yacc]", "Expr: '(' Expr ')' Expr_");}
-	| Id ExprIdTail {debug("[Yacc]", "Expr: Id ExprIdTail");}
+	| Id ExprIdTail {debug("[Yacc]", "Expr: Id("+*$<str_val>1+") ExprIdTail");}
 ;
 ExprIdTail: Expr_ {debug("[Yacc]", "ExprIdTail: Expr_");}
 	| '(' ExprList ')' Expr_ {debug("[Yacc]", "ExprIdTail: '(' ExprList ')' Expr_");}
@@ -118,7 +130,8 @@ BinOp: '+' {debug("[Yacc]", "BinOp: '+'");}
 void debug(string prefix, string s)
 {
 	extern FILE *yyout;
-	fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
+	if (prefix == "[Yacc]")
+		fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
 }
 int yyerror()
 {
