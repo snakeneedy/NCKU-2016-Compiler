@@ -6,6 +6,7 @@
 	int yyerror(string s);
 	void debug(string prefix, string s);
 	extern FILE *yyout;
+	vector<string> prefix;
 %}
 %error-verbose // for more detail of error
 %union {
@@ -42,16 +43,6 @@ DeclList_: Type Id Decl
 	{
 		debug("[Yacc]", "DeclList_: Type Id("+*$<str_val>2+") Decl");
 		// TODO: idMain
-		if (*$<str_val>2 == "idMain")
-		{
-			fprintf(yyout, "    .data\n");
-			fprintf(yyout, "idA: .word 1024\n");
-			fprintf(yyout, "idB: .word 4096\n");
-			fprintf(yyout, "    .text\n");
-			fprintf(yyout, "    .globl main\n");
-			fprintf(yyout, "main:\n");
-			fprintf(yyout, "%s\n", (*$3).c_str());
-		}
 	}
 ;
 Decl: VarDecl_
@@ -61,8 +52,6 @@ Decl: VarDecl_
 	| FunDecl
 	{
 		debug("[Yacc]", "Decl: FunDecl");
-		$$ = new string();
-		*$$ += *$1;
 	}
 ;
 VarDecl: Type Id VarDecl_
@@ -82,9 +71,6 @@ VarDecl_: ';'
 FunDecl: '(' ParamDeclList ')' Block
 	{
 		debug("[Yacc]", "FunDecl: '(' ParamDeclList ')' Block");
-		$$ = new string();
-		// *$$ += ";   FunDecl: '(' ParamDeclList ')' Block\n";
-		*$$ += *$4;
 	}
 ;
 VarDeclList:
@@ -136,8 +122,6 @@ ParamDecl_:
 Block: '{' VarDeclList StmtList '}'
 	{
 		debug("[Yacc]", "Block: '{' VarDeclList StmtList '}'");
-		$$ = new string();
-		*$$ += *$3;
 	}
 ;
 Type: Int
@@ -152,79 +136,53 @@ Type: Int
 StmtList: Stmt StmtList_
 	{
 		debug("[Yacc]", "StmtList: Stmt StmtList_");
-		$$ = new string();
-		*$$ += *$1;
-		*$$ += *$2;
 	}
 ;
 StmtList_:
 	{
 		debug("[Yacc]", "StmtList_:");
-		$$ = new string();
 	}
 	| StmtList
 	{
 		debug("[Yacc]", "StmtList_: StmtList");
-		$$ = new string();
-		*$$ += *$1;
 	}
 ;
 Stmt: ';'
 	{
 		debug("[Yacc]", "Stmt: ';'");
-		$$ = new string();
 	}
 	| Expr ';'
 	{
 		debug("[Yacc]", "Stmt: Expr ';'");
-		$$ = new string();
 	}
 	| Return Expr ';'
 	{
-		debug("[Yacc]", "Stmt: Return Expr ';'");
-		$$ = new string();
-		*$$ += "    li $v0, 10\n";
-		*$$ += "    syscall\n";
-	}
+		debug("[Yacc]", "Stmt: Return Expr ';'");	}
 	| Break ';'
 	{
 		debug("[Yacc]", "Stmt: Break ';'");
-		$$ = new string();
 	}
 	| If '(' Expr ')' Stmt Else Stmt
 	{
 		debug("[Yacc]", "Stmt: If '(' Expr ')' Stmt Else Stmt");
-		$$ = new string();
 	}
 	| While '(' Expr ')' Stmt
 	{
 		debug("[Yacc]", "Stmt: While '(' Expr ')' Stmt");
-		$$ = new string();
 	}
 	| Block
 	{
 		debug("[Yacc]", "Stmt: Block");
-		$$ = new string();
 	}
 	| Print Id ';'
 	{
 		debug("[Yacc]", "Stmt: Print Id("+*$<str_val>2+") ';'");
 		// TODO: Print
-		$$ = new string();
-		// *$$ += ";   Stmt: Print Id("+*$<str_val>2+") ';'\n";
-		*$$ += "    move $a0, "+*$<str_val>2+"\n";
-		*$$ += "    li   $v0, 1\n";
-		*$$ += "    syscall\n";
 	}
 	| Read Id ';'
 	{
 		debug("[Yacc]", "Stmt: Read Id("+*$<str_val>2+") ';'");
 		// TODO: Read
-		$$ = new string();
-		// *$$ += ";   Stmt: Read Id("+*$<str_val>2+") ';'\n";
-		*$$ += "    li   $v0, 5\n";
-		*$$ += "    syscall\n";
-		*$$ += "    move "+*$<str_val>2+", $v0\n";
 	}
 ;
 Expr: UnaryOp Expr
@@ -365,8 +323,8 @@ BinOp: '+'
 
 void debug(string prefix, string s)
 {
-	//if (prefix == "[Yacc]")
-	//	fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
+	if (prefix == "[Yacc]")
+		fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
 }
 int yyerror()
 {
