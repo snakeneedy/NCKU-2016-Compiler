@@ -14,11 +14,13 @@ int main(int argc, char **argv)
 	}
 	else if (argc == 2 && string(argv[1]) != "-o")
 	{
-		char * filename = new char[50]();
-		strcat(filename, argv[1]);
-		strcat(filename, ".s");
-		yyout = fopen(filename, "w");
-		return 1;
+		if ((yyin = fopen(argv[1], "r")) == NULL)
+		{
+			cerr << argv[0] << ": " << argv[1] << " cannot be open.\n";
+			return 1;
+		}
+		string output = string(argv[1]);
+		yyout = fopen((output+".s").c_str(), "w");
 	}
 	else if (argc > 1)
 	{
