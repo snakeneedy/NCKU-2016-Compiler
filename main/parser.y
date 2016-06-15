@@ -8,6 +8,7 @@
 	extern FILE *yyout;
 	extern vector<string> vVariables;
 	extern vector<string> vFunctions;
+	extern vector<string> vMain;
 %}
 %error-verbose // for more detail of error
 %union {
@@ -54,7 +55,13 @@ Program: DeclList
 		// main:
 		fprintf(yyout, "main:\n");
 		// TODO: main
-		;
+		for (vector<string>::iterator it = vMain.begin();
+				it != vMain.end();
+				it++)
+		{
+			fprintf(yyout, "%s\n", it->c_str());
+		}
+		fprintf(yyout, "\n");
 	}
 ;
 DeclList:
@@ -84,6 +91,7 @@ Decl: VarDecl_
 VarDecl: Type Id VarDecl_
 	{
 		debug("[Yacc]", "VarDecl: Type Id("+*$<str_val>2+") VarDecl_");
+		vVariables.push_back(*$<str_val>2 + ": .word 1");
 	}
 ;
 VarDecl_: ';'
@@ -184,7 +192,10 @@ Stmt: ';'
 	}
 	| Return Expr ';'
 	{
-		debug("[Yacc]", "Stmt: Return Expr ';'");	}
+		debug("[Yacc]", "Stmt: Return Expr ';'");
+		vMain.push_back("    b exit");
+		vMain.push_back("");
+	}
 	| Break ';'
 	{
 		debug("[Yacc]", "Stmt: Break ';'");
@@ -205,11 +216,17 @@ Stmt: ';'
 	{
 		debug("[Yacc]", "Stmt: Print Id("+*$<str_val>2+") ';'");
 		// TODO: Print
+		vMain.push_back("    lw   $a0, " + *$<str_val>2);
+		vMain.push_back("    jal print");
+		vMain.push_back("");
 	}
 	| Read Id ';'
 	{
 		debug("[Yacc]", "Stmt: Read Id("+*$<str_val>2+") ';'");
 		// TODO: Read
+		vMain.push_back("    jal read");
+		vMain.push_back("    sw   $v0, " + *$<str_val>2);
+		vMain.push_back("");
 	}
 ;
 Expr: UnaryOp Expr

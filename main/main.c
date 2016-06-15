@@ -1,6 +1,7 @@
 #include "parser.h"
 vector<string> vVariables;
 vector<string> vFunctions;
+vector<string> vMain;
 
 void init ();
 int yyparse();
