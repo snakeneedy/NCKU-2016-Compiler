@@ -1,5 +1,8 @@
 #include "parser.h"
+vector<string> vVariables;
+vector<string> vFunctions;
 
+void init ();
 int yyparse();
 
 int main(int argc, char **argv)
@@ -48,5 +51,27 @@ int main(int argc, char **argv)
 		}
 	}
 	;
+	init();
 	yyparse();
+}
+void init ()
+{
+	vVariables.push_back("newline: .asciiz \"\\n\"");
+
+	vFunctions.push_back("exit:");
+	vFunctions.push_back("    li $v0, 10");
+	vFunctions.push_back("    syscall");
+	vFunctions.push_back("");
+	vFunctions.push_back("read:");
+	vFunctions.push_back("    li   $v0, 5");
+	vFunctions.push_back("    syscall");
+	vFunctions.push_back("    jr   $ra");
+	vFunctions.push_back("");
+	vFunctions.push_back("print:");
+	vFunctions.push_back("    li   $v0, 1");
+	vFunctions.push_back("    syscall");
+	vFunctions.push_back("    li   $v0, 4");
+	vFunctions.push_back("    la   $a0, newline");
+	vFunctions.push_back("    syscall");
+	vFunctions.push_back("    jr   $ra");
 }

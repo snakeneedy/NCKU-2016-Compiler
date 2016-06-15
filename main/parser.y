@@ -6,7 +6,8 @@
 	int yyerror(string s);
 	void debug(string prefix, string s);
 	extern FILE *yyout;
-	vector<string> prefix;
+	extern vector<string> vVariables;
+	extern vector<string> vFunctions;
 %}
 %error-verbose // for more detail of error
 %union {
@@ -28,6 +29,32 @@
 Program: DeclList
 	{
 		debug("[Yacc]", "Program: DeclList");
+		// .data
+		fprintf(yyout, "    .data\n");
+		// TODO: variable
+		// idName: .word 1
+		for (vector<string>::iterator it = vVariables.begin();
+				it != vVariables.end();
+				it++)
+		{
+			fprintf(yyout, "%s\n", it->c_str());
+		}
+		// .text
+		fprintf(yyout, "\n    .text\n");
+		// TODO: function
+		for (vector<string>::iterator it = vFunctions.begin();
+				it != vFunctions.end();
+				it++)
+		{
+			fprintf(yyout, "%s\n", it->c_str());
+		}
+		fprintf(yyout, "\n");
+		// .globl main
+		fprintf(yyout, "    .globl main\n");
+		// main:
+		fprintf(yyout, "main:\n");
+		// TODO: main
+		;
 	}
 ;
 DeclList:
@@ -323,8 +350,8 @@ BinOp: '+'
 
 void debug(string prefix, string s)
 {
-	if (prefix == "[Yacc]")
-		fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
+	//if (prefix == "[Yacc]")
+	//	fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
 }
 int yyerror()
 {
