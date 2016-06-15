@@ -62,8 +62,33 @@ idA: .word 1024
     .text
     .globl main
 main:
-    li $t0, 100
-    sw $t0, idA
+    li   $t0, 100
+    sw   $t0, idA
+```
+
+Push and Pop
+```asm
+    .data
+    .text
+push:
+    add  $sp, $sp, -4
+    sw   $a0, 0($sp)
+    jr   $ra
+
+pop:
+    lw   $v0, 0($sp)
+    add  $sp, $sp, 4
+    jr   $ra
+
+    .globl main
+main:
+    li  $a0, 10
+    jal push
+    jal pop
+    move $a0, $v0
+    jal print
+
+    b exit
 ```
 
 
