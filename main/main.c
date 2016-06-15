@@ -1,7 +1,7 @@
 #include "parser.h"
-vector<string> vVariables;
-vector<string> vFunctions;
-vector<string> vMain;
+vector<string> vVarStmt;
+vector<string> vFuncStmt;
+vector<string> vMainStmt;
 
 void init ();
 int yyparse();
@@ -57,22 +57,22 @@ int main(int argc, char **argv)
 }
 void init ()
 {
-	vVariables.push_back("newline: .asciiz \"\\n\"");
+	vVarStmt.push_back("newline: .asciiz \"\\n\"");
 
-	vFunctions.push_back("exit:");
-	vFunctions.push_back("    li $v0, 10");
-	vFunctions.push_back("    syscall");
-	vFunctions.push_back("");
-	vFunctions.push_back("read:");
-	vFunctions.push_back("    li   $v0, 5");
-	vFunctions.push_back("    syscall");
-	vFunctions.push_back("    jr   $ra");
-	vFunctions.push_back("");
-	vFunctions.push_back("print:");
-	vFunctions.push_back("    li   $v0, 1");
-	vFunctions.push_back("    syscall");
-	vFunctions.push_back("    li   $v0, 4");
-	vFunctions.push_back("    la   $a0, newline");
-	vFunctions.push_back("    syscall");
-	vFunctions.push_back("    jr   $ra");
+	vFuncStmt.push_back("exit:");
+	vFuncStmt.push_back("    li $v0, 10");
+	vFuncStmt.push_back("    syscall");
+	vFuncStmt.push_back("");
+	vFuncStmt.push_back("read:");
+	vFuncStmt.push_back("    li   $v0, 5");
+	vFuncStmt.push_back("    syscall");
+	vFuncStmt.push_back("    jr   $ra");
+	vFuncStmt.push_back("");
+	vFuncStmt.push_back("print:");
+	vFuncStmt.push_back("    li   $v0, 1");
+	vFuncStmt.push_back("    syscall");
+	vFuncStmt.push_back("    li   $v0, 4");
+	vFuncStmt.push_back("    la   $a0, newline");
+	vFuncStmt.push_back("    syscall");
+	vFuncStmt.push_back("    jr   $ra");
 }
