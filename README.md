@@ -9,6 +9,64 @@ Run command:
 + `./main/parser -o <output_path> <input_path>`
 
 # MISP Sample
+
+Exit
+```asm
+    .text
+    .globl main
+main:
+    b exit
+exit:
+    li   $v0, 10
+    syscall
+```
+
+Read
+```asm
+    .data
+idA: .word 1024
+    .text
+    .globl main
+main:
+    jal read
+    sw   $v0, idA
+read:
+    li   $v0, 5
+    syscall
+    jr   $ra
+```
+
+Print
+```asm
+    .data
+newline: .asciiz "\n"
+idA: .word 1024
+    .text
+    .globl main
+main:
+    lw $a0, idA
+    jal print
+print:
+    li   $v0, 1
+    syscall
+    li   $v0, 4
+    la   $a0, newline
+    syscall
+    jr   $ra
+```
+
+Align Value
+```asm
+    .data
+idA: .word 1024
+    .text
+    .globl main
+main:
+    li $t0, 100
+    sw $t0, idA
+```
+
+
 ## Sample 1
 
 ```asm
