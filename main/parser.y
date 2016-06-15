@@ -17,6 +17,7 @@
 %token Geq Leq Eq Neq And Or
 %token <int_val> Number
 %token Id
+%type  <str_val> Decl
 
 %%
 
@@ -38,6 +39,13 @@ DeclList_: Type Id Decl
 	{
 		debug("[Yacc]", "DeclList_: Type Id("+*$<str_val>2+") Decl");
 		// TODO: idMain
+		if (*$<str_val>2 == "idMain")
+		{
+			fprintf(yyout, "    .text\n");
+			fprintf(yyout, "    .global main\n");
+			fprintf(yyout, "main:\n");
+			fprintf(yyout, "%s\n", (*$3).c_str());
+		}
 	}
 ;
 Decl: VarDecl_
@@ -47,6 +55,7 @@ Decl: VarDecl_
 	| FunDecl
 	{
 		debug("[Yacc]", "Decl: FunDecl");
+		$$ = new string("//  FunDecl\n");
 	}
 ;
 VarDecl: Type Id VarDecl_
@@ -319,8 +328,8 @@ BinOp: '+'
 
 void debug(string prefix, string s)
 {
-	if (prefix == "[Yacc]")
-		fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
+	//if (prefix == "[Yacc]")
+	//	fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
 }
 int yyerror()
 {
