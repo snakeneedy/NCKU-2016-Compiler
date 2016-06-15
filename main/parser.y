@@ -7,14 +7,17 @@
 	void debug(string prefix, string s);
 	extern FILE *yyout;
 %}
+%error-verbose // for more detail of error
 %union {
 	int     int_val;
 	string* str_val;
+	vector<string> *vec_str_val;
 }
 %start Program
 %token Int Char Read Print Main Return If While Else Break
 %token '<' '>' '(' ')' '{' '}' '[' ']' '+' '-' '*' '=' ',' ';'
 %token Geq Leq Eq Neq And Or
+%token CommentOneLine CommentMultiLineLeft CommentMultiLineRight
 %token <int_val> Number
 %token Id
 %type  <str_val> Decl FunDecl Block StmtList StmtList_ Stmt
@@ -41,8 +44,11 @@ DeclList_: Type Id Decl
 		// TODO: idMain
 		if (*$<str_val>2 == "idMain")
 		{
+			fprintf(yyout, "    .data\n");
+			fprintf(yyout, "idA: .word 1024\n");
+			fprintf(yyout, "idB: .word 4096\n");
 			fprintf(yyout, "    .text\n");
-			// fprintf(yyout, "    global main\n"); // syntax error
+			fprintf(yyout, "    .globl main\n");
 			fprintf(yyout, "main:\n");
 			fprintf(yyout, "%s\n", (*$3).c_str());
 		}
@@ -206,6 +212,7 @@ Stmt: ';'
 		// TODO: Print
 		$$ = new string();
 		// *$$ += ";   Stmt: Print Id("+*$<str_val>2+") ';'\n";
+		*$$ += "    move $a0, "+*$<str_val>2+"\n";
 		*$$ += "    li   $v0, 1\n";
 		*$$ += "    syscall\n";
 	}
@@ -217,7 +224,7 @@ Stmt: ';'
 		// *$$ += ";   Stmt: Read Id("+*$<str_val>2+") ';'\n";
 		*$$ += "    li   $v0, 5\n";
 		*$$ += "    syscall\n";
-		*$$ += "    move $a0, $v0\n";
+		*$$ += "    move "+*$<str_val>2+", $v0\n";
 	}
 ;
 Expr: UnaryOp Expr

@@ -6,6 +6,11 @@ int yyerror(char *);
 int yyerror(string s);
 void debug(string prefix, string s);
 %}
+%option yylineno
+/* YY_NO_INPUT */
+%option noinput
+/* for 'void yyunput(int, char*)' defined but not used */
+%option nounput
 
 digit	[0-9]
 letter	[A-Za-z]
@@ -35,6 +40,9 @@ break		{debug("[Lex]", "break"); return Break;}
 "!="		{debug("[Lex]", "'!='"); return Neq;}
 "&&"		{debug("[Lex]", "'&&'"); return And;}
 "||"		{debug("[Lex]", "'||'"); return Or;}
+"//"		{debug("[Lex]", "'//'"); return CommentOneLine;}
+"/*"		{debug("[Lex]", "'/*'"); return CommentMultiLineLeft;}
+"*/"		{debug("[Lex]", "'*/'"); return CommentMultiLineRight;}
 [ \t\r]		{;}
 \n			{yylineno++;}
 {num}		{debug("[Lex]", "Number"); yylval.int_val = atoi(yytext); return Number;}
