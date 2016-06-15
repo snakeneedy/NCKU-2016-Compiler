@@ -5,9 +5,19 @@ int yyparse();
 int main(int argc, char **argv)
 {
 	extern FILE *yyin, *yyout;
+
+
 	if (argc == 1)
 	{
 		cerr << argv[0] << ": No input file.\n";
+		return 1;
+	}
+	else if (argc == 2 && string(argv[1]) != "-o")
+	{
+		char * filename = new char[50]();
+		strcat(filename, argv[1]);
+		strcat(filename, ".s");
+		yyout = fopen(filename, "w");
 		return 1;
 	}
 	else if (argc > 1)
