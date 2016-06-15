@@ -5,6 +5,7 @@
 	int yyerror(char *);
 	int yyerror(string s);
 	void debug(string prefix, string s);
+	extern FILE *yyout;
 %}
 %union {
 	int     int_val;
@@ -318,7 +319,6 @@ BinOp: '+'
 
 void debug(string prefix, string s)
 {
-	extern FILE *yyout;
 	if (prefix == "[Yacc]")
 		fprintf(yyout, "%s %s\n", prefix.c_str(), s.c_str());
 }
