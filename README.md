@@ -8,6 +8,42 @@ Run command:
 + `./main/parser <input_path> -o <output_path>`
 + `./main/parser -o <output_path> <input_path>`
 
+# MISP Sample
+## Sample 1
+
+```asm
+    .data
+newline: .asciiz "\n"
+idA: .word 1024
+    .text
+    .globl main
+main:
+    la $a0, idA
+    jal print
+    li $t0, 100
+    sw $t0, idA
+    lw $a0, idA
+    jal print
+    b exit
+
+read:
+    li   $v0, 5
+    syscall
+    jr   $ra
+
+print:
+    li   $v0, 1
+    syscall
+    li $v0, 4
+    la $a0, newline
+    syscall
+    jr   $ra
+
+exit:
+    li $v0, 10
+    syscall
+```
+
 # Current mission
 
 Convert `test.c` to `test.s`
