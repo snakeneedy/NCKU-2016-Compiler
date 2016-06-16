@@ -645,3 +645,67 @@ int idMain ( ) {
 [Yacc] DeclList: DeclList_ DeclList
 [Yacc] Program: DeclList
 ```
+
+## Sample 3
+
+```c
+int idMain ( ) {
+    int idA ;
+    int idB ;
+    if ( 3 > 2 )
+    {
+        print idA ;
+    }
+    else
+    {
+        print idB ;
+    }
+    return 0 ;
+}
+```
+
+```text
+[Yacc] Type: Int
+[Yacc] ParamDeclList:
+[Yacc] Type: Int
+[Yacc] VarDecl_: ';'
+[Yacc] VarDecl: Type Id(idA) VarDecl_
+[Yacc] Type: Int
+[Yacc] VarDecl_: ';'
+[Yacc] VarDecl: Type Id(idB) VarDecl_
+[Yacc] VarDeclList:
+[Yacc] VarDeclList: VarDecl VarDeclList
+[Yacc] VarDeclList: VarDecl VarDeclList
+[Yacc] BinOp: '>'
+[Yacc] Expr_:
+[Yacc] Expr: Number Expr_
+[Yacc] Expr_: BinOp Expr
+[Yacc] Expr: Number Expr_
+[Yacc] VarDeclList:
+[Yacc] Stmt: Print Id(idA) ';'
+[Yacc] StmtList_:
+[Yacc] StmtList: Stmt StmtList_
+[Yacc] Block: '{' VarDeclList StmtList '}'
+[Yacc] Stmt: Block
+[Yacc] VarDeclList:
+[Yacc] Stmt: Print Id(idB) ';'
+[Yacc] StmtList_:
+[Yacc] StmtList: Stmt StmtList_
+[Yacc] Block: '{' VarDeclList StmtList '}'
+[Yacc] Stmt: Block
+[Yacc] Stmt: If '(' Expr ')' Stmt Else Stmt
+[Yacc] Expr_:
+[Yacc] Expr: Number Expr_
+[Yacc] Stmt: Return Expr ';'
+[Yacc] StmtList_:
+[Yacc] StmtList: Stmt StmtList_
+[Yacc] StmtList_: StmtList
+[Yacc] StmtList: Stmt StmtList_
+[Yacc] Block: '{' VarDeclList StmtList '}'
+[Yacc] FunDecl: '(' ParamDeclList ')' Block
+[Yacc] Decl: FunDecl
+[Yacc] DeclList_: Type Id(idMain) Decl
+[Yacc] DeclList:
+[Yacc] DeclList: DeclList_ DeclList
+[Yacc] Program: DeclList
+```
