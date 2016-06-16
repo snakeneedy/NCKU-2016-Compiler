@@ -6,6 +6,7 @@
 	int yyerror(string s);
 	void debug(string prefix, string s);
 	extern FILE *yyout;
+	Scope scope;
 %}
 %error-verbose // for more detail of error
 %union {
@@ -42,20 +43,39 @@ DeclList_: Type Id Decl
 	{
 		debug("[Yacc]", "DeclList_: Type Id("+*$<str_val>2+") Decl");
 		// TODO: idMain
+		string prefix = "    .data\nnewline: .asciiz \"\\n\"\n\n    .text\nread:\n    li   $v0, 5\n    syscall\n    jr   $ra\n\nprint:\n    li   $v0, 1\n    syscall\n    li   $v0, 4\n    la   $a0, newline\n    syscall\n    jr   $ra\n\nexit:\n    li   $v0, 10\n    syscall\n";
+		if (*$<str_val>2 == "idMain")
+		{
+			// prefix
+			fprintf(yyout, "%s", prefix.c_str());
+			fprintf(yyout, "    .globl main\n");
+			//
+			fprintf(yyout, "main:\n");
+			fprintf(yyout, "%s", (*$<str_val>3).c_str());
+		}
+		else
+		{
+			fprintf(yyout, "%s:\n", (*$<str_val>2).c_str());
+			fprintf(yyout, "%s", (*$<str_val>3).c_str());
+		}
 	}
 ;
 Decl: VarDecl_
 	{
 		debug("[Yacc]", "Decl: VarDecl_");
+		$<str_val>$ = new string();
 	}
 	| FunDecl
 	{
 		debug("[Yacc]", "Decl: FunDecl");
+		$<str_val>$ = new string(*$<str_val>1);
 	}
 ;
 VarDecl: Type Id VarDecl_
 	{
 		debug("[Yacc]", "VarDecl: Type Id("+*$<str_val>2+") VarDecl_");
+		$<str_val>$ = new string();
+		scope.def_var(*$<str_val>2);
 	}
 ;
 VarDecl_: ';'
@@ -70,6 +90,7 @@ VarDecl_: ';'
 FunDecl: '(' ParamDeclList ')' Block
 	{
 		debug("[Yacc]", "FunDecl: '(' ParamDeclList ')' Block");
+		$<str_val>$ = new string(*$<str_val>4);
 	}
 ;
 VarDeclList:
@@ -121,6 +142,7 @@ ParamDecl_:
 Block: '{' VarDeclList StmtList '}'
 	{
 		debug("[Yacc]", "Block: '{' VarDeclList StmtList '}'");
+		$<str_val>$ = new string(*$<str_val>3);
 	}
 ;
 Type: Int
@@ -135,15 +157,18 @@ Type: Int
 StmtList: Stmt StmtList_
 	{
 		debug("[Yacc]", "StmtList: Stmt StmtList_");
+		$<str_val>$ = new string(*$<str_val>1 + *$<str_val>2);
 	}
 ;
 StmtList_:
 	{
 		debug("[Yacc]", "StmtList_:");
+		$<str_val>$ = new string();
 	}
 	| StmtList
 	{
 		debug("[Yacc]", "StmtList_: StmtList");
+		$<str_val>$ = new string(*$<str_val>1);
 	}
 ;
 Stmt: ';'
@@ -156,7 +181,10 @@ Stmt: ';'
 	}
 	| Return Expr ';'
 	{
-		debug("[Yacc]", "Stmt: Return Expr ';'");	}
+		debug("[Yacc]", "Stmt: Return Expr ';'");
+		$<str_val>$ = new string();
+		*$<str_val>$ += "    jr   $ra";
+	}
 	| Break ';'
 	{
 		debug("[Yacc]", "Stmt: Break ';'");
@@ -177,11 +205,25 @@ Stmt: ';'
 	{
 		debug("[Yacc]", "Stmt: Print Id("+*$<str_val>2+") ';'");
 		// TODO: Print
+		// fprintf(yyout, "%s", scope.load_var(*$<str_val>2).c_str());
+		// fprintf(yyout, "    move $a0, $v0\n");
+		// fprintf(yyout, "    jal print\n");
+		$<str_val>$ = new string();
+		*$<str_val>$ += scope.load_var(*$<str_val>2);
+		*$<str_val>$ += "    move $a0, $v0\n";
+		*$<str_val>$ += "    jal print\n";
 	}
 	| Read Id ';'
 	{
 		debug("[Yacc]", "Stmt: Read Id("+*$<str_val>2+") ';'");
 		// TODO: Read
+		// fprintf(yyout, "    jal read\n");
+		// fprintf(yyout, "    move $a0, $v0\n");
+		// fprintf(yyout, "%s", scope.assign_var(*$<str_val>2).c_str());
+		$<str_val>$ = new string();
+		*$<str_val>$ += "    jal read\n";
+		*$<str_val>$ += "    move $a0, $v0\n";
+		*$<str_val>$ += scope.assign_var(*$<str_val>2);
 	}
 ;
 Expr: UnaryOp Expr
