@@ -322,6 +322,18 @@ Expr_:
 		{
 			arith.push("    add  $t0, $t0, $v0\n");
 		}
+		if (*$<str_val>1 == "-")
+		{
+			arith.push("    sub  $t0, $t0, $v0\n");
+		}
+		if (*$<str_val>1 == "*")
+		{
+			arith.push("    mul  $t0, $t0, $v0\n");
+		}
+		if (*$<str_val>1 == "/")
+		{
+			arith.push("    div  $t0, $t0, $v0\n");
+		}
 		//
 		if ((*$<str_val>2)[0] == 'i')
 		{
@@ -361,10 +373,12 @@ ExprListTail_:
 UnaryOp: '-'
 	{
 		debug("[Yacc]", "UnaryOp: '-'");
+		$<str_val>$ = new string("-");
 	}
 	| '!'
 	{
 		debug("[Yacc]", "UnaryOp: '!'");
+		$<str_val>$ = new string("!");
 	}
 ;
 BinOp: '+'
@@ -375,17 +389,17 @@ BinOp: '+'
 	| '-'
 	{
 		debug("[Yacc]", "BinOp: '-'");
-		$<str_val>$ = new string("");
+		$<str_val>$ = new string("-");
 	}
 	| '*'
 	{
 		debug("[Yacc]", "BinOp: '*'");
-		$<str_val>$ = new string("");
+		$<str_val>$ = new string("*");
 	}
 	| '/'
 	{
 		debug("[Yacc]", "BinOp: '/'");
-		$<str_val>$ = new string("");
+		$<str_val>$ = new string("/");
 	}
 	| Eq
 	{
