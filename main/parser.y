@@ -7,6 +7,7 @@
 	void debug(string prefix, string s);
 	extern FILE *yyout;
 	Scope scope;
+	stack<string> arith;
 %}
 %error-verbose // for more detail of error
 %union {
@@ -178,6 +179,7 @@ Stmt: ';'
 	| Expr ';'
 	{
 		debug("[Yacc]", "Stmt: Expr ';'");
+		$<str_val>$ = new string(*$<str_val>1);
 	}
 	| Return Expr ';'
 	{
@@ -229,35 +231,72 @@ Stmt: ';'
 Expr: UnaryOp Expr
 	{
 		debug("[Yacc]", "Expr: UnaryOp Expr");
+		$<str_val>$ = new string();
 	}
 	| Number Expr_
 	{
 		debug("[Yacc]", "Expr: Number Expr_");
+		stringstream ss;
+		ss << $<int_val>1;
+		$<str_val>$ = new string(ss.str());
 	}
 	| '(' Expr ')' Expr_
 	{
 		debug("[Yacc]", "Expr: '(' Expr ')' Expr_");
+		$<str_val>$ = new string();
 	}
 	| Id ExprIdTail
 	{
 		debug("[Yacc]", "Expr: Id("+*$<str_val>1+") ExprIdTail");
+		$<str_val>$ = new string();
+		if (*$<str_val>2 == "=")
+		{
+			while (!arith.empty())
+			{
+				*$<str_val>$ += arith.top();
+				// fprintf(yyout, "%s", arith.top().c_str());
+				arith.pop();
+			}
+			*$<str_val>$ += "    move $a0, $t0\n";
+			*$<str_val>$ += scope.assign_var(*$<str_val>1);
+			// fprintf(yyout, "    move $a0, $t0\n");
+			// fprintf(yyout, "%s", scope.assign_var(*$<str_val>1).c_str());
+		}
+		else
+		{
+			*$<str_val>$ += *$<str_val>1; // Id
+		}
 	}
 ;
 ExprIdTail: Expr_
 	{
 		debug("[Yacc]", "ExprIdTail: Expr_");
+		$<str_val>$ = new string(*$<str_val>1);
 	}
 	| '(' ExprList ')' Expr_
 	{
 		debug("[Yacc]", "ExprIdTail: '(' ExprList ')' Expr_");
+		$<str_val>$ = new string();
 	}
 	| '[' Expr ']' ExprArrayTail
 	{
 		debug("[Yacc]", "ExprIdTail: '[' Expr ']' ExprArrayTail");
+		$<str_val>$ = new string();
 	}
 	| '=' Expr
 	{
 		debug("[Yacc]", "ExprIdTail: '=' Expr");
+		$<str_val>$ = new string("=");
+		if ((*$<str_val>2)[0] == 'i')
+		{
+			// idXXX
+			arith.push("    move $t0, $v0\n");
+			arith.push( scope.load_var(*$<str_val>2) );
+		}
+		else
+		{
+			arith.push("    li   $t0, " + *$<str_val>2 +"\n");
+		}
 	}
 ;
 ExprArrayTail: Expr_
@@ -272,10 +311,28 @@ ExprArrayTail: Expr_
 Expr_:
 	{
 		debug("[Yacc]", "Expr_:");
+		$<str_val>$ = new string();
 	}
 	| BinOp Expr
 	{
 		debug("[Yacc]", "Expr_: BinOp Expr");
+		$<str_val>$ = new string(*$<str_val>1);
+		// opration
+		if (*$<str_val>1 == "+")
+		{
+			arith.push("    add  $t0, $t0, $v0\n");
+		}
+		//
+		if ((*$<str_val>2)[0] == 'i')
+		{
+			// Expr == Id
+			arith.push( scope.load_var(*$<str_val>2) );
+		}
+		else
+		{
+			// Expr == Number
+			arith.push("    li   $v0, "+ *$<str_val>2 +"\n");
+		}
 	}
 ;
 ExprList:
@@ -313,50 +370,62 @@ UnaryOp: '-'
 BinOp: '+'
 	{
 		debug("[Yacc]", "BinOp: '+'");
+		$<str_val>$ = new string("+");
 	}
 	| '-'
 	{
 		debug("[Yacc]", "BinOp: '-'");
+		$<str_val>$ = new string("");
 	}
 	| '*'
 	{
 		debug("[Yacc]", "BinOp: '*'");
+		$<str_val>$ = new string("");
 	}
 	| '/'
 	{
 		debug("[Yacc]", "BinOp: '/'");
+		$<str_val>$ = new string("");
 	}
 	| Eq
 	{
 		debug("[Yacc]", "BinOp: Eq");
+		$<str_val>$ = new string("");
 	}
 	| Neq
 	{
 		debug("[Yacc]", "BinOp: Neq");
+		$<str_val>$ = new string("");
 	}
 	| '<'
 	{
 		debug("[Yacc]", "BinOp: '<'");
+		$<str_val>$ = new string("");
 	}
 	| Leq
 	{
 		debug("[Yacc]", "BinOp: Leq");
+		$<str_val>$ = new string("");
 	}
 	| '>'
 	{
 		debug("[Yacc]", "BinOp: '>'");
+		$<str_val>$ = new string("");
 	}
 	| Geq
 	{
 		debug("[Yacc]", "BinOp: Geq");
+		$<str_val>$ = new string("");
 	}
 	| And
 	{
 		debug("[Yacc]", "BinOp: And");
+		$<str_val>$ = new string("");
 	}
 	| Or
 	{
 		debug("[Yacc]", "BinOp: Or");
+		$<str_val>$ = new string("");
 	}
 ;
 
