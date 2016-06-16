@@ -6,9 +6,6 @@
 	int yyerror(string s);
 	void debug(string prefix, string s);
 	extern FILE *yyout;
-	extern vector<string> vVarStmt;
-	extern vector<string> vFuncStmt;
-	extern vector<string> vMainStmt;
 %}
 %error-verbose // for more detail of error
 %union {
@@ -30,38 +27,6 @@
 Program: DeclList
 	{
 		debug("[Yacc]", "Program: DeclList");
-		// .data
-		fprintf(yyout, "    .data\n");
-		// TODO: variable
-		// idName: .word 1
-		for (vector<string>::iterator it = vVarStmt.begin();
-				it != vVarStmt.end();
-				it++)
-		{
-			fprintf(yyout, "%s\n", it->c_str());
-		}
-		// .text
-		fprintf(yyout, "\n    .text\n");
-		// TODO: function
-		for (vector<string>::iterator it = vFuncStmt.begin();
-				it != vFuncStmt.end();
-				it++)
-		{
-			fprintf(yyout, "%s\n", it->c_str());
-		}
-		fprintf(yyout, "\n");
-		// .globl main
-		fprintf(yyout, "    .globl main\n");
-		// main:
-		fprintf(yyout, "main:\n");
-		// TODO: main
-		for (vector<string>::iterator it = vMainStmt.begin();
-				it != vMainStmt.end();
-				it++)
-		{
-			fprintf(yyout, "%s\n", it->c_str());
-		}
-		fprintf(yyout, "\n");
 	}
 ;
 DeclList:
@@ -91,7 +56,6 @@ Decl: VarDecl_
 VarDecl: Type Id VarDecl_
 	{
 		debug("[Yacc]", "VarDecl: Type Id("+*$<str_val>2+") VarDecl_");
-		vVarStmt.push_back(*$<str_val>2 + ": .word 1");
 	}
 ;
 VarDecl_: ';'
@@ -192,10 +156,7 @@ Stmt: ';'
 	}
 	| Return Expr ';'
 	{
-		debug("[Yacc]", "Stmt: Return Expr ';'");
-		vMainStmt.push_back("    b exit");
-		vMainStmt.push_back("");
-	}
+		debug("[Yacc]", "Stmt: Return Expr ';'");	}
 	| Break ';'
 	{
 		debug("[Yacc]", "Stmt: Break ';'");
@@ -216,17 +177,11 @@ Stmt: ';'
 	{
 		debug("[Yacc]", "Stmt: Print Id("+*$<str_val>2+") ';'");
 		// TODO: Print
-		vMainStmt.push_back("    lw   $a0, " + *$<str_val>2);
-		vMainStmt.push_back("    jal print");
-		vMainStmt.push_back("");
 	}
 	| Read Id ';'
 	{
 		debug("[Yacc]", "Stmt: Read Id("+*$<str_val>2+") ';'");
 		// TODO: Read
-		vMainStmt.push_back("    jal read");
-		vMainStmt.push_back("    sw   $v0, " + *$<str_val>2);
-		vMainStmt.push_back("");
 	}
 ;
 Expr: UnaryOp Expr
