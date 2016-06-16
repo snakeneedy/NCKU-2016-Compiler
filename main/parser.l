@@ -45,7 +45,7 @@ break		{debug("[Lex]", "break"); return Break;}
 "*/"		{debug("[Lex]", "'*/'"); return CommentMultiLineRight;}
 [ \t\r]		{;}
 \n			{yylineno++;}
-{num}		{debug("[Lex]", "Number"); yylval.int_val = atoi(yytext); return Number;}
+-?{num}		{debug("[Lex]", "Number"); yylval.int_val = atoi(yytext); return Number;}
 
 [<>(){}\[\]+\-*/=,;]	{debug("[Lex]", "" + string(yytext)); return *yytext;}
 id{upper}{letter}*		{debug("[Lex]", "id: " + string(yytext)); yylval.str_val = new string(yytext); return Id;}
