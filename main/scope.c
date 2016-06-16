@@ -12,7 +12,7 @@ Scope::~Scope()
 {
 	;
 }
-void Scope::def_var (MyType type, string varName, int size = -1)
+void Scope::def_var (string varName, int size)
 {
 	Variable var;
 	if (size == -1)
@@ -29,7 +29,7 @@ void Scope::def_var (MyType type, string varName, int size = -1)
 	varTable[varName] = var;
 	maxAddr = var.addr;
 }
-string Scope::assign_var (string varName, MyType value, int index = 0)
+string Scope::assign_var (string varName, int index)
 {
 	// store the value of $a0
 	/*
@@ -47,7 +47,7 @@ string Scope::assign_var (string varName, MyType value, int index = 0)
 	result += "    add  $sp, $sp, " + refAddr + "\n";
 	return result;
 }
-string Scope::load_var (string varName, int index = 0)
+string Scope::load_var (string varName, int index)
 {
 	// load the value to $v0
 	/*

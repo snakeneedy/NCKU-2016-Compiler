@@ -17,9 +17,9 @@ class Scope
 public:
 	Scope();
 	~Scope();
-	void def_var (MyType type, string varName, int size);
-	string assign_var (string varName, MyType value, int index);
-	string load_var (string varName, int index);
+	void def_var (string varName, int size = -1);
+	string assign_var (string varName, int index = 0);
+	string load_var (string varName, int index = 0);
 private:
 	map<string, Variable> varTable;
 	int maxAddr;
