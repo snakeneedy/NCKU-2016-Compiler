@@ -15,7 +15,7 @@ Scope::~Scope()
 void Scope::def_var (string varName, int size)
 {
 	Variable var;
-	if (size == -1)
+	if (size < 0)
 	{
 		var.isArray = false;
 		var.size = 1;
@@ -25,7 +25,7 @@ void Scope::def_var (string varName, int size)
 		var.isArray = true;
 		var.size = size;
 	}
-	var.addr = (4) * size + maxAddr;
+	var.addr = (4) * var.size + maxAddr;
 	varTable[varName] = var;
 	maxAddr = var.addr;
 }
@@ -40,7 +40,7 @@ string Scope::assign_var (string varName, int index)
 	string result;
 	Variable var = varTable[varName];
 	stringstream ss;
-	ss << var.addr + index * (-4);
+	ss << var.addr + index * (4);
 	string refAddr = ss.str();
 	result += "    add  $sp, $sp, -" + refAddr + "\n";
 	result += "    sw   $a0, 0($sp)\n";
@@ -58,7 +58,7 @@ string Scope::load_var (string varName, int index)
 	string result;
 	Variable var = varTable[varName];
 	stringstream ss;
-	ss << var.addr + index * (-4);
+	ss << var.addr + index * (4);
 	string refAddr = ss.str();
 	result += "    add  $sp, $sp, -" + refAddr + "\n";
 	result += "    lw   $v0, 0($sp)\n";
