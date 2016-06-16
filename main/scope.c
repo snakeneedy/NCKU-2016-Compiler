@@ -1,0 +1,69 @@
+/* scope.c */
+/* output MIPS asm code */
+#ifndef SCOPE
+#define SCOPE
+#include "scope.h"
+
+Scope::Scope():maxAddr(0)
+{
+	;
+}
+Scope::~Scope()
+{
+	;
+}
+void Scope::def_var (MyType type, string varName, int size = -1)
+{
+	Variable var;
+	if (size == -1)
+	{
+		var.isArray = false;
+		var.size = 1;
+	}
+	else
+	{
+		var.isArray = true;
+		var.size = size;
+	}
+	var.addr = (4) * size + maxAddr;
+	varTable[varName] = var;
+	maxAddr = var.addr;
+}
+string Scope::assign_var (string varName, MyType value, int index = 0)
+{
+	// store the value of $a0
+	/*
+		add $sp, $sp, -4
+		sw $a0, 0($sp)
+		add $sp, $sp, 4
+	*/
+	string result;
+	Variable var = varTable[varName];
+	stringstream ss;
+	ss << var.addr + index * (-4);
+	string refAddr = ss.str();
+	result += "    add  $sp, $sp, -" + refAddr + "\n";
+	result += "    sw   $a0, 0($sp)\n";
+	result += "    add  $sp, $sp, " + refAddr + "\n";
+	return result;
+}
+string Scope::load_var (string varName, int index = 0)
+{
+	// load the value to $v0
+	/*
+		add $sp, $sp, -4
+		lw $v0, 0($sp)
+		add $sp, $sp, 4
+	*/
+	string result;
+	Variable var = varTable[varName];
+	stringstream ss;
+	ss << var.addr + index * (-4);
+	string refAddr = ss.str();
+	result += "    add  $sp, $sp, -" + refAddr + "\n";
+	result += "    lw   $v0, 0($sp)\n";
+	result += "    add  $sp, $sp, " + refAddr + "\n";
+	return result;
+}
+
+#endif // SCOPE

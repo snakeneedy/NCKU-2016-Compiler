@@ -1,4 +1,4 @@
-OBJS = y.tab.o lex.yy.o main.o
+OBJS = y.tab.o lex.yy.o scope.o main.o
 REMAINS = y.tab.c y.tab.h lex.yy.c
 TARGET = parser
 CX = g++
